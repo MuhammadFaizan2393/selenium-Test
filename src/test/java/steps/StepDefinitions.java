@@ -12,8 +12,12 @@ import pages.DarazHomePage;
 import pages.LoginPage;
 import pages.DashboardPage;
 import utils.WebDriverUtils;
+import pages.HomePage;
 
 public class StepDefinitions {
+private HomePage homePage;
+private DarazHomePage darazHomePage;
+
 
     private WebDriver driver;
     private DarazHomePage darazHomePage;
@@ -21,11 +25,11 @@ public class StepDefinitions {
     private DashboardPage dashboardPage;
 
     public StepDefinitions() {
-        driver = WebDriverUtils.getDriver("chrome"); // Or any other browser
-        darazHomePage = new DarazHomePage(driver);
-        loginPage = new LoginPage(driver);
-        dashboardPage = new DashboardPage(driver);
-    }
+    driver = WebDriverUtils.getDriver('chrome');
+    homePage = new HomePage(driver);
+    darazHomePage = new DarazHomePage(driver);
+}
+
 
     @Given("the user is on the Daraz Pakistan homepage")
     public void the_user_is_on_the_daraz_pakistan_homepage() {
@@ -79,4 +83,58 @@ public class StepDefinitions {
         Assert.assertTrue(dashboardPage.isUserNameVisible());
 
     }
+
+@Given("I am on the product listing page")
+public void i_am_on_the_product_listing_page() { //new
+    // Assuming you navigate to the product listing page here
+    driver.get("https://example.com/products"); // Replace with your actual URL
+}
+
+@When("I click "Add to Cart" for a product")
+public void i_click_add_to_cart_for_a_product() { //new
+    homePage.clickAddToCart();
+}
+
+@Then("the product should appear in my cart")
+public void the_product_should_appear_in_my_cart() { //new
+    homePage.clickCartLink();
+    // Add assertions here to verify the product is in the cart
+}
+
+@And("the cart count should increase by {int}")
+public void the_cart_count_should_increase_by(int expectedIncrease) { //new
+    int initialCartCount = homePage.getCartCount();
+    homePage.waitForCartCount(initialCartCount + expectedIncrease);
+    int finalCartCount = homePage.getCartCount();
+    Assert.assertEquals(finalCartCount, initialCartCount + expectedIncrease);
+}
+
+@When("I add two different products to the cart")
+public void i_add_two_different_products_to_the_cart() { //new
+    // Assuming you have a way to add two different products
+    homePage.clickAddToCart();
+    // Navigate to another product page and add it to the cart
+    driver.get("https://example.com/another-product"); // Replace with your actual URL
+    homePage.clickAddToCart();
+}
+
+@Then("both products should appear in my cart")
+public void both_products_should_appear_in_my_cart() { //new
+    homePage.clickCartLink();
+    // Add assertions here to verify both products are in the cart
+}
+
+@And("the cart count should reflect {int} items")
+public void the_cart_count_should_reflect_items(int expectedCount) { //new
+    homePage.waitForCartCount(expectedCount);
+    int actualCount = homePage.getCartCount();
+    Assert.assertEquals(actualCount, expectedCount);
+}
+
+@Given("I am on the product page")
+public void i_am_on_the_product_page() { //new
+    // Assuming you navigate to a product page here
+    driver.get("https://example.com/product"); // Replace with your actual URL
+}
+
 }
