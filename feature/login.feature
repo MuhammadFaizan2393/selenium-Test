@@ -7,7 +7,7 @@ Feature: Daraz.pk Login Functionality
   Background:
     Given the user is on the Daraz Pakistan homepage
     When the user clicks on the Login button
-    Then the login modal or page should be display
+    Then the login modal or page should be displayed
 
   # ------------------ Positive Scenario ------------------
 
